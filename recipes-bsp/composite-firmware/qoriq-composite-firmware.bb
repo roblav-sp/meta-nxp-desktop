@@ -12,16 +12,16 @@ inherit deploy
 ITB_IMAGE = "fsl-image-kernelitb"
 DEPENDS = "u-boot-mkimage-native qoriq-cst-native qoriq-atf"
 DEPENDS:ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
-do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build distrobootscr:do_deploy flex-installer:do_deploy"
+do_install[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build distrobootscr:do_deploy flex-installer:do_deploy"
 
-do_deploy[nostamp] = "1"
+do_install[nostamp] = "1"
 do_patch[noexec] = "1"
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 S = "${WORKDIR}"
 
-do_deploy() {
+do_install() {
     cd ${RECIPE_SYSROOT_NATIVE}/usr/bin/cst
     cp ${S}/*.sh ./
     cp ${S}/${MACHINE}.manifest ./
@@ -29,7 +29,7 @@ do_deploy() {
     ./create_composite_firmware.sh -m ${MACHINE} -s ${DEPLOY_DIR_IMAGE}
 }
 
-addtask deploy before do_build after do_compile
+addtask install before do_build after do_compile
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
